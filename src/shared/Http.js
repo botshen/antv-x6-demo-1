@@ -4,9 +4,6 @@ import axios from "axios";
 import { mockSession } from "../mock/mock";
 import { mocktreeData } from "../mock/mock";
 
-
-
-
 export class Http {
     instance
     constructor(baseURL) {
