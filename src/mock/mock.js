@@ -17,8 +17,8 @@ export const mocktreeData = () => {
       nodes: [
         {
           id: "node1",
-          x: 100,
-          y: 500,
+          x: 50,
+          y: 50,
           width: 200,
           height: 40,
           label: "node1",
@@ -32,6 +32,14 @@ export const mocktreeData = () => {
           label: "node2",
         },
         {
+          id: "node99",
+          x: 160,
+          y: 280,
+          width: 80,
+          height: 40,
+          label: "node2.1",
+        },
+        {
           id: "node3",
           x: 300,
           y: 300,
@@ -41,7 +49,7 @@ export const mocktreeData = () => {
         },
         {
           id: "node4",
-          x: 300,
+          x: 400,
           y: 100,
           width: 80,
           height: 40,
@@ -53,14 +61,17 @@ export const mocktreeData = () => {
         {
           source: "node1",
           target: "node2",
-          targetAnchor: "left",
+        },
+        {
+          source: "node1",
+          target: "node99",
         },
         {
           source: "node2",
           target: "node3",
         },
         {
-          source: "node2",
+          source: "node3",
           target: "node4",
         },
       ],
