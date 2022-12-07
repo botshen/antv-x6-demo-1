@@ -8,14 +8,15 @@
 import { Graph } from "@antv/x6";
 import { http } from "./shared/Http";
 
-
 export default {
   name: "App",
   async mounted() {
     const response = await http
       .post(
         "/treeData",
-        {},
+        {
+          xxx: "ssss",
+        },
         {
           params: { _mock: "treeData" },
         }
