@@ -1,19 +1,35 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div ref="treeWrapper"></div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { Graph } from "@antv/x6";
+import { http } from "./shared/Http";
+
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  async mounted() {
+    const response = await http
+      .post(
+        "/treeData",
+        {},
+        {
+          params: { _mock: "treeData" },
+        }
+      )
+      .catch();
+    console.log(response.data);
+    const graph = new Graph({
+      container: this.$refs.treeWrapper,
+      width: 800,
+      height: 600,
+    });
+    graph.fromJSON(response.data.data);
+  },
+};
 </script>
 
 <style>
