@@ -153,8 +153,6 @@ export default {
     initTree() {
       const graph = new Graph({
         container: this.$refs.wrapper,
-        width: 800,
-        height: 600,
         panning: true,
         interacting: false,
         connecting: {
