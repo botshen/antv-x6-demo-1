@@ -7,7 +7,7 @@ import { Graph, Node, Edge, Shape } from "@antv/x6";
 
 // 定义节点
 class TreeNode extends Node {
-  collapsed = false;
+  collapsed = true;
 
   postprocess() {
     this.toggleCollapse(false);

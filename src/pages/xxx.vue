@@ -1,19 +1,22 @@
 <template>
-  <div id="container" class="wrapper">
-  </div>
+  <div id="container" style="height: 600px"></div>
 </template>
-
 <script>
-import { Graph, Path } from '@antv/x6'
+import { Graph } from '@antv/x6'
 import Hierarchy from '@antv/hierarchy'
+import '@antv/x6-vue-shape'
+import condition from './condition' //这是我的vue组件，作为子节点展示在思维导图上
 export default {
-  name: "HelloVue",
   data() {
     return {
 
-    };
+    }
+  },
+  mounted() {
+    this.init()
   },
   methods: {
+    //初始化⽅法
     init() {
       // 中心主题或分支主题
       Graph.registerNode(
@@ -23,16 +26,16 @@ export default {
           markup: [
             {
               tagName: 'rect',
-              selector: 'body',
+              selector: 'body'
             },
             {
               tagName: 'image',
-              selector: 'img',
+              selector: 'img'
             },
             {
               tagName: 'text',
-              selector: 'label',
-            },
+              selector: 'label'
+            }
           ],
           attrs: {
             body: {
@@ -40,7 +43,7 @@ export default {
               ry: 6,
               stroke: '#5F95FF',
               fill: '#EFF4FF',
-              strokeWidth: 1,
+              strokeWidth: 1
             },
             img: {
               ref: 'body',
@@ -52,18 +55,17 @@ export default {
               'xlink:href':
                 'https://gw.alipayobjects.com/mdn/rms_43231b/afts/img/A*SYCuQ6HHs5cAAAAAAAAAAAAAARQnAQ',
               event: 'add:topic',
-              class: 'topic-image',
+              class: 'topic-image'
             },
             label: {
               fontSize: 14,
-              fill: '#262626',
-            },
-          },
+              fill: '#262626'
+            }
+          }
         },
         true,
       )
 
-      // 子主题
       Graph.registerNode(
         'topic-child',
         {
@@ -71,36 +73,47 @@ export default {
           markup: [
             {
               tagName: 'rect',
-              selector: 'body',
+              selector: 'body'
             },
             {
               tagName: 'text',
-              selector: 'label',
+              selector: 'label'
             },
             {
               tagName: 'path',
-              selector: 'line',
-            },
+              selector: 'line'
+            }
           ],
           attrs: {
             body: {
               fill: '#ffffff',
               strokeWidth: 0,
-              stroke: '#5F95FF',
+              stroke: '#5F95FF'
             },
             label: {
               fontSize: 14,
               fill: '#262626',
-              textVerticalAnchor: 'bottom',
+              textVerticalAnchor: 'bottom'
             },
             line: {
               stroke: '#5F95FF',
               strokeWidth: 2,
-              d: 'M 0 15 L 60 15',
-            },
-          },
+              d: 'M 0 15 L 60 15'
+            }
+          }
         },
         true,
+      )
+
+      //// 注册vue组件 方法二
+      Graph.registerVueComponent('condition',
+        {
+          template: `<condition />`,
+          components: {
+            condition
+          }
+        },
+        true
       )
 
       // 连接器
@@ -116,7 +129,7 @@ export default {
      L ${midX} ${midY}
      Q ${ctrX} ${ctrY} ${targetPoint.x} ${targetPoint.y}
     `
-          return options.raw ? Path.parse(pathData) : pathData
+          return pathData
         },
         true,
       )
@@ -127,76 +140,88 @@ export default {
         {
           inherit: 'edge',
           connector: {
-            name: 'mindmap',
+            name: 'mindmap'
           },
           attrs: {
             line: {
               targetMarker: '',
               stroke: '#A2B1C3',
-              strokeWidth: 2,
-            },
+              strokeWidth: 2
+            }
           },
-          zIndex: 0,
+          zIndex: 0
         },
         true,
       )
+      /** 不需要的内容，大概意思就是，规定了两个变量
+      interface MindMapData {
+        id: string
+        type: 'topic' | 'topic-branch' | 'topic-child'
+        label: string
+        width: number
+        height: number
+        children?: MindMapData[]
+      }
 
-
-
+      interface HierarchyResult {
+        id: string
+        x: number
+        y: number
+        data: MindMapData
+        children?: HierarchyResult[]
+      }
+      **/
       const data = {
         id: '1',
         type: 'topic',
-        label: '中心主题',
+        label: '添加',
         width: 160,
         height: 50,
         children: [
           {
             id: '1-1',
             type: 'topic-branch',
-            label: '分支主题1',
+            label: '条件',
             width: 100,
             height: 40,
             children: [
               {
                 id: '1-1-1',
                 type: 'topic-child',
-                label: '子主题1',
-                width: 60,
-                height: 30,
+                label: '条件描述1',
+                width: 550,
+                height: 40
               },
               {
                 id: '1-1-2',
                 type: 'topic-child',
-                label: '子主题2',
-                width: 60,
-                height: 30,
-              },
-            ],
+                label: '条件描述2',
+                width: 550,
+                height: 40
+              }
+            ]
           },
           {
             id: '1-2',
             type: 'topic-branch',
-            label: '分支主题2',
+            label: '条件2',
             width: 100,
-            height: 40,
-          },
-        ],
+            height: 40
+          }
+        ]
       }
-
       const graph = new Graph({
         container: document.getElementById('container'),
         connecting: {
-          connectionPoint: 'anchor',
+          connectionPoint: 'anchor'
         },
         selecting: {
-          enabled: true,
+          enabled: true
         },
         keyboard: {
-          enabled: true,
-        },
+          enabled: true
+        }
       })
-      console.log(graph)
-
       const render = () => {
         const result = Hierarchy.mindmap(data, {
           direction: 'H',
@@ -214,7 +239,7 @@ export default {
           },
           getSide: () => {
             return 'right'
-          },
+          }
         })
         const cells = []
         const traverse = (hierarchyItem) => {
@@ -223,14 +248,15 @@ export default {
             cells.push(
               graph.createNode({
                 id: data.id,
-                shape: data.type === 'topic-child' ? 'topic-child' : 'topic',
+                shape: data.type === 'topic-child' ? 'vue-shape' : 'topic', //这里我做了改造，让子节点使用我的组件
                 x: hierarchyItem.x,
                 y: hierarchyItem.y,
                 width: data.width,
                 height: data.height,
                 label: data.label,
                 type: data.type,
-              }),
+                component: 'condition'
+              })
             )
             if (children) {
               children.forEach((item) => {
@@ -245,22 +271,22 @@ export default {
                           ? {
                             name: 'right',
                             args: {
-                              dx: -16,
-                            },
+                              dx: -16
+                            }
                           }
                           : {
                             name: 'center',
                             args: {
-                              dx: '25%',
-                            },
-                          },
+                              dx: '25%'
+                            }
+                          }
                     },
                     target: {
                       cell: id,
                       anchor: {
-                        name: 'left',
-                      },
-                    },
+                        name: 'left'
+                      }
+                    }
                   }),
                 )
                 traverse(item)
@@ -273,14 +299,11 @@ export default {
         graph.centerContent()
       }
 
-      const findItem = (
-        obj,
-        id,
-      ) => {
+      const findItem = (obj, id) => {
         if (obj.id === id) {
           return {
             parent: null,
-            node: obj,
+            node: obj
           }
         }
         const { children } = obj
@@ -290,7 +313,7 @@ export default {
             if (res) {
               return {
                 parent: res.parent || obj,
-                node: res.node,
+                node: res.node
               }
             }
           }
@@ -300,7 +323,7 @@ export default {
 
       const addChildNode = (id, type) => {
         const res = findItem(data, id)
-        const dataItem = res?.node
+        const dataItem = res.node
         if (dataItem) {
           let item = null
           const length = dataItem.children ? dataItem.children.length : 0
@@ -308,17 +331,17 @@ export default {
             item = {
               id: `${id}-${length + 1}`,
               type: 'topic-branch',
-              label: `分支主题${length + 1}`,
+              label: `条件${length + 1}`,
               width: 100,
-              height: 40,
+              height: 40
             }
           } else if (type === 'topic-branch') {
             item = {
               id: `${id}-${length + 1}`,
               type: 'topic-child',
-              label: `子主题${length + 1}`,
-              width: 60,
-              height: 30,
+              label: `条件描述${length + 1}`,
+              width: 550,
+              height: 40
             }
           }
           if (item) {
@@ -333,16 +356,16 @@ export default {
         return null
       }
 
-      // const removeNode = (id) => {
-      //   const res = findItem(data, id)
-      //   const dataItem = res?.parent
-      //   if (dataItem && dataItem.children) {
-      //     const { children } = dataItem
-      //     const index = children.findIndex((item) => item.id === id)
-      //     return children.splice(index, 1)
-      //   }
-      //   return null
-      // }
+      const removeNode = (id) => {
+        const res = findItem(data, id)
+        const dataItem = res?.parent
+        if (dataItem && dataItem.children) {
+          const { children } = dataItem
+          const index = children.findIndex((item) => item.id === id)
+          return children.splice(index, 1)
+        }
+        return null
+      }
 
       graph.on('add:topic', ({ node }) => {
         const { id } = node
@@ -351,39 +374,33 @@ export default {
           render()
         }
       })
-      // graph.bindKey(['backspace', 'delete'], () => {
-      //   const selectedNodes = graph.getSelectedCells().filter((item) => item.isNode())
-      //   if (selectedNodes.length) {
-      //     const { id } = selectedNodes[0]
-      //     if (removeNode(id)) {
-      //       render()
-      //     }
-      //   }
-      // })
-
-      // graph.bindKey('tab', (e) => {
-      //   e.preventDefault()
-      //   const selectedNodes = graph.getSelectedCells().filter((item) => item.isNode())
-      //   if (selectedNodes.length) {
-      //     const node = selectedNodes[0]
-      //     const type = node.prop('type')
-      //     if (addChildNode(node.id, type)) {
-      //       render()
-      //     }
-      //   }
-      // })
+      graph.bindKey(['backspace', 'delete'], () => {
+        const selectedNodes = graph.getSelectedCells().filter((item) => item.isNode())
+        if (selectedNodes.length) {
+          const { id } = selectedNodes[0]
+          if (removeNode(id)) {
+            render()
+          }
+        }
+      })
+      graph.bindKey('tab', (e) => {
+        e.preventDefault()
+        const selectedNodes = graph.getSelectedCells().filter((item) => item.isNode())
+        if (selectedNodes.length) {
+          const node = selectedNodes[0]
+          const type = node.prop('type')
+          if (addChildNode(node.id, type)) {
+            render()
+          }
+        }
+      })
 
       render()
     }
-  },
-  mounted() {
-    console.log('111', 111)
-    this.init()
-  },
+  }
 }
 </script>
-
-<style lang="scss" >
+<style lang="scss">
 .topic-image {
   visibility: hidden;
   cursor: pointer;

@@ -3,17 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@antv/hierarchy": "^0.6.8",
     "@antv/x6": "^2.0.7",
     "@faker-js/faker": "^7.6.0",
     "axios": "^1.2.1",
     "core-js": "^3.8.3",
+    "insert-css": "^2.0.0",
+    "sass-loader": "8.0.2",
+    "node-sass": "npm:dart-sass",
     "vue": "^2.6.14",
-    "vue-router": "3.5.2"
+    "vue-router": "3.5.2",
+    "webpack": "^5.75.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
